@@ -10,4 +10,9 @@ public class HelloController {
     public String hello() {
         return "Day 1 Complete! My first API!";
     }
+
+    @GetMapping("/goodbye")
+    public String goodbye(){
+        return "That's it for Today,GOOD BYE..!!!";
+    }
 }
