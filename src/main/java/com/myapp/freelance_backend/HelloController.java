@@ -1,9 +1,6 @@
 package com.myapp.freelance_backend;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class HelloController {
@@ -27,6 +24,11 @@ public class HelloController {
     @GetMapping("/goodbye")
     public String goodbye(){
         return "That's it for Today,GOOD BYE..!!!";
+    }
+
+    @PostMapping("/register")
+    public String registerUser(@RequestBody User user){
+        return "User " + user.getName() + " registered with email " + user.getEmail();
     }
 
 
