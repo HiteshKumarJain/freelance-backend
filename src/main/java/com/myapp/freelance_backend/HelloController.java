@@ -27,8 +27,17 @@ public class HelloController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody User user){
-        return "User " + user.getName() + " registered with email " + user.getEmail();
+    public ApiResponse registerUser(@RequestBody User user){
+
+        if(user.getName() ==  null || user.getName().isEmpty()) {
+           return  new ApiResponse("error","Name is required",null);
+        }
+        if(user.getEmail() ==  null || user.getEmail().isEmpty()) {
+           return  new ApiResponse("error","Email is required",null);
+        }
+        return  new ApiResponse("Success","User created successfully",user);
+
+
     }
 
 
