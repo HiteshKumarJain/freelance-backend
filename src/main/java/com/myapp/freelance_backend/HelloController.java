@@ -56,4 +56,25 @@ public class HelloController {
         return ResponseEntity.status(404).body(new ApiResponse("error","User not found",null));
     }
 
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<ApiResponse> deleteUser(@PathVariable int id) {
+        if(id == 1) {
+            return ResponseEntity.status(200).body(new ApiResponse("success","User deleted successfully",null));
+        }
+        return ResponseEntity.status(404).body(new ApiResponse("error","User not found, cannot delete",null));
+    }
+
+    @PutMapping("/user/{id}")
+    public ResponseEntity<ApiResponse> updateUser(@PathVariable int id,@RequestBody User user) {
+        if(id != 1) {
+            return ResponseEntity.status(404).body(new ApiResponse("error","User not found, cannot update",null));
+        } else if(user.getName() == null || user.getName().isEmpty()) {
+            return ResponseEntity.status(400).body(new ApiResponse("error","Name is required",null));
+        } else if(user.getEmail() == null || user.getEmail().isEmpty()) {
+            return ResponseEntity.status(400).body(new ApiResponse("error","Email is required",null));
+        }
+            user.setId(id);
+            return ResponseEntity.status(200).body(new ApiResponse("success","User updated successfully",user));
+    }
+
 }
