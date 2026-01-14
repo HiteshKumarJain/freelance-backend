@@ -76,5 +76,29 @@ public class HelloController {
             user.setId(id);
             return ResponseEntity.status(200).body(new ApiResponse("success","User updated successfully",user));
     }
+    @PatchMapping("/user/{id}")
+    public ResponseEntity<ApiResponse> partialUpdateUser(@PathVariable int id , @RequestBody User user) {
+        if(id != 1) {
+            return ResponseEntity.status(404).body(new ApiResponse("error","User not found, cannot update",null));
+        }
+        User existingUser = new User();
+        existingUser.setId(id);
+        existingUser.setName("Hitesh");
+        existingUser.setEmail("hitesh@cbrs.com");
+        boolean updated = false;
+        if(user.getName() != null && !user.getName().isEmpty()) {
+            existingUser.setName(user.getName());
+            updated = true;
+        }
+        if(user.getEmail() != null && !user.getEmail().isEmpty()) {
+            existingUser.setEmail(user.getEmail());
+            updated = true;
+        }
+        if(!updated) {
+            return ResponseEntity.status(400).body(new ApiResponse("error","Atleast one field must be provided",null));
+        }
+        return ResponseEntity.status(200).body(new ApiResponse("success","User updated partially",existingUser));
+
+    }
 
 }

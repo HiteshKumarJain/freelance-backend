@@ -67,4 +67,33 @@ public class ProductController {
         }
         return ResponseEntity.status(404).body(new ApiResponse("error","Product not found, cannot delete",null));
     }
+
+    @PatchMapping("/products/{id}")
+    public ResponseEntity<ApiResponse> partialUpdateProduct(@PathVariable int id, @RequestBody Product product) {
+        if(id!=1){
+            return ResponseEntity.status(404).body(new ApiResponse("error","Product not found",null));
+        }
+        Product existingProduct = new Product();
+        existingProduct.setId(id);
+        existingProduct.setName("Iphone 16");
+        existingProduct.setPrice(65000);
+        existingProduct.setCategory("Mobiles");
+        boolean updated = false;
+        if(product.getName() != null && !product.getName().isEmpty()) {
+            existingProduct.setName(product.getName());
+            updated = true;
+        }
+        if(product.getPrice() > 0) {
+            existingProduct.setPrice(product.getPrice());
+            updated = true;
+        }
+        if(product.getCategory() != null && !product.getCategory().isEmpty()){
+            existingProduct.setCategory(product.getCategory());
+            updated=true;
+        }
+        if(!updated) {
+            return ResponseEntity.status(400).body(new ApiResponse("error","Atleast one field should be updated",null));
+        }
+        return ResponseEntity.status(200).body(new ApiResponse("success","Product updated partially",existingProduct));
+    }
 }

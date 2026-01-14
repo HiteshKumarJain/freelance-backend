@@ -1,7 +1,8 @@
 package com.myapp.freelance_backend;
-
 public class User {
     private int id;
+    private String name;
+    private String email;
 
     public int getId() {
         return id;
@@ -10,10 +11,6 @@ public class User {
     public void setId(int id) {
         this.id = id;
     }
-
-    private String name;
-    private String email;
-
     public String getEmail() {
         return email;
     }
