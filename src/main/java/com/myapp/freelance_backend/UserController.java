@@ -76,8 +76,7 @@ public class UserController {
 
     @DeleteMapping("/user/{id}")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable int id) {
-        Optional<User> userOptional = userRepository.findById(id);
-        if(!userOptional.isPresent()) {
+        if(!userRepository.existsById(id)) {
             return ResponseEntity.status(404).body(new ApiResponse("error","User not found, cannot delete",null));
         }
         userRepository.deleteById(id);
@@ -118,7 +117,7 @@ public class UserController {
             return ResponseEntity.status(400).body(new ApiResponse("error","Atleast one field must be provided",null));
         }
         User savedUser = userRepository.save(existingUser);
-        return ResponseEntity.status(200).body(new ApiResponse("success","User updated partially",existingUser));
+        return ResponseEntity.status(200).body(new ApiResponse("success","User updated partially",savedUser));
     }
 
 }
