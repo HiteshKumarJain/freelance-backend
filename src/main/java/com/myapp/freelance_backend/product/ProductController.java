@@ -1,5 +1,6 @@
-package com.myapp.freelance_backend;
+package com.myapp.freelance_backend.product;
 
+import com.myapp.freelance_backend.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,4 +1,4 @@
-package com.myapp.freelance_backend;
+package com.myapp.freelance_backend.product;
 
 public class Product {
     private int id;

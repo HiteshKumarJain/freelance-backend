@@ -1,6 +1,13 @@
 package com.myapp.freelance_backend;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "users")
 public class User {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String name;
     private String email;
 
