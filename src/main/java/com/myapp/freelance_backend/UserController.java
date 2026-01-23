@@ -47,6 +47,9 @@ public class UserController {
 //           both of the return statements are same only in name if condition and email if condition
 //            but the return statement used in the if condition of mail is a shortcut one
         }
+        if(userRepository.existsByEmail(user.getEmail())) {
+            return ResponseEntity.status(409).body(new ApiResponse("error","Email id already registered",null));
+        }
         User savedUser = userRepository.save(user);
         return  ResponseEntity.status(201).body(new ApiResponse("Success","User created successfully",savedUser));
     }
@@ -114,10 +117,64 @@ public class UserController {
             updated = true;
         }
         if(!updated) {
-            return ResponseEntity.status(400).body(new ApiResponse("error","Atleast one field must be provided",null));
+            return ResponseEntity.status(400).body(new ApiResponse("error","At least one field must be provided",null));
         }
         User savedUser = userRepository.save(existingUser);
         return ResponseEntity.status(200).body(new ApiResponse("success","User updated partially",savedUser));
+    }
+
+    @GetMapping("/user/email/{email}")
+    public ResponseEntity<ApiResponse> findUserByEmail(@PathVariable String email) {
+        if(email == null || email.isEmpty()) {
+            return ResponseEntity.status(400).body(new ApiResponse("error","Please enter valid email",null));
+        }
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if(userOptional.isPresent()) {
+            User user = userOptional.get();
+            return ResponseEntity.status(200).body(new ApiResponse("success","User found",user));
+        }
+        return ResponseEntity.status(404).body(new ApiResponse("error","User not found",null));
+    }
+
+    @GetMapping("/user/search")
+    public ResponseEntity<ApiResponse> searchUser(@RequestParam String name) {
+        if(name == null || name.isEmpty()) {
+            return ResponseEntity.status(400).body(new ApiResponse("error","Please enter name",null));
+        }
+        List<User> usersByName = userRepository.findByNameContaining(name);
+        if(usersByName.isEmpty()) {
+            return ResponseEntity.status(404).body(new ApiResponse("error","User not found",null));
+        }
+        return ResponseEntity.status(200).body(new ApiResponse("success","Users found with name  : " + name,usersByName));
+    }
+
+    @GetMapping("/user/domain/{domain}")
+    public ResponseEntity<ApiResponse> findUserByEmailDomain(@PathVariable String domain) {
+        if(domain == null || domain.isEmpty()) {
+            return ResponseEntity.status(400).body(new ApiResponse("error","Invalid email format",null));
+        }
+        List<User> usersWithDomain = userRepository.findByEmailEndingWith("@"+domain);
+        if(usersWithDomain.isEmpty()) {
+            return ResponseEntity.status(404).body(new ApiResponse("error","User not found",null));
+        }
+        return ResponseEntity.status(200).body(new ApiResponse("success","Users found with domain  : @" + domain,usersWithDomain));
+    }
+
+    @GetMapping("/user/exists/email/{email}")
+    public ResponseEntity<ApiResponse> userEmailExists(@PathVariable String email) {
+        if(email == null || email.isEmpty()) {
+            return ResponseEntity.status(400).body(new ApiResponse("error","Please enter valid email",null));
+        }
+        if(userRepository.existsByEmail(email)) {
+            return ResponseEntity.status(200).body(new ApiResponse("success","User found with email  : " + email,true));
+        }
+        return ResponseEntity.status(404).body(new ApiResponse("error","User not found with email  : " + email,false));
+    }
+
+    @GetMapping("/user/count/{name}")
+    public ResponseEntity<ApiResponse> getUserNameCount(@PathVariable String name) {
+        long userCount=userRepository.countByName(name);
+        return ResponseEntity.status(200).body(new ApiResponse("success","Count of name",userCount));
     }
 
 }
