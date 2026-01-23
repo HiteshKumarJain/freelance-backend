@@ -125,9 +125,6 @@ public class UserController {
 
     @GetMapping("/user/email/{email}")
     public ResponseEntity<ApiResponse> findUserByEmail(@PathVariable String email) {
-        if(email == null || email.isEmpty()) {
-            return ResponseEntity.status(400).body(new ApiResponse("error","Please enter valid email",null));
-        }
         Optional<User> userOptional = userRepository.findByEmail(email);
         if(userOptional.isPresent()) {
             User user = userOptional.get();
@@ -138,37 +135,29 @@ public class UserController {
 
     @GetMapping("/user/search")
     public ResponseEntity<ApiResponse> searchUser(@RequestParam String name) {
-        if(name == null || name.isEmpty()) {
-            return ResponseEntity.status(400).body(new ApiResponse("error","Please enter name",null));
-        }
         List<User> usersByName = userRepository.findByNameContaining(name);
         if(usersByName.isEmpty()) {
             return ResponseEntity.status(404).body(new ApiResponse("error","User not found",null));
         }
-        return ResponseEntity.status(200).body(new ApiResponse("success","Users found with name  : " + name,usersByName));
+        return ResponseEntity.status(200).body(new ApiResponse("success","Users found with name : " + name,usersByName));
     }
 
     @GetMapping("/user/domain/{domain}")
     public ResponseEntity<ApiResponse> findUserByEmailDomain(@PathVariable String domain) {
-        if(domain == null || domain.isEmpty()) {
-            return ResponseEntity.status(400).body(new ApiResponse("error","Invalid email format",null));
-        }
         List<User> usersWithDomain = userRepository.findByEmailEndingWith("@"+domain);
         if(usersWithDomain.isEmpty()) {
             return ResponseEntity.status(404).body(new ApiResponse("error","User not found",null));
         }
-        return ResponseEntity.status(200).body(new ApiResponse("success","Users found with domain  : @" + domain,usersWithDomain));
+        return ResponseEntity.status(200).body(new ApiResponse("success","Users found with domain : @" + domain,usersWithDomain));
     }
 
     @GetMapping("/user/exists/email/{email}")
     public ResponseEntity<ApiResponse> userEmailExists(@PathVariable String email) {
-        if(email == null || email.isEmpty()) {
-            return ResponseEntity.status(400).body(new ApiResponse("error","Please enter valid email",null));
-        }
+
         if(userRepository.existsByEmail(email)) {
-            return ResponseEntity.status(200).body(new ApiResponse("success","User found with email  : " + email,true));
+            return ResponseEntity.status(200).body(new ApiResponse("success","User found with email : " + email,true));
         }
-        return ResponseEntity.status(404).body(new ApiResponse("error","User not found with email  : " + email,false));
+        return ResponseEntity.status(200).body(new ApiResponse("error","User not found with email : " + email,false));
     }
 
     @GetMapping("/user/count/{name}")
