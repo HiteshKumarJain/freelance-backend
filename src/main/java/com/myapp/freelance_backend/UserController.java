@@ -157,13 +157,32 @@ public class UserController {
         if(userRepository.existsByEmail(email)) {
             return ResponseEntity.status(200).body(new ApiResponse("success","User found with email : " + email,true));
         }
-        return ResponseEntity.status(200).body(new ApiResponse("error","User not found with email : " + email,false));
+        return ResponseEntity.status(200).body(new ApiResponse("success","User not found with email : " + email,false));
     }
 
     @GetMapping("/user/count/{name}")
     public ResponseEntity<ApiResponse> getUserNameCount(@PathVariable String name) {
         long userCount=userRepository.countByName(name);
         return ResponseEntity.status(200).body(new ApiResponse("success","Count of name",userCount));
+    }
+
+    @GetMapping("/user/find")
+    public ResponseEntity<ApiResponse> searchByNameOrEmail(@RequestParam String searchTerm) {
+        List<User> usersByNameOrEmail = userRepository.findByNameOrEmail(searchTerm);
+        if(usersByNameOrEmail.isEmpty()) {
+            return ResponseEntity.status(404).body(new ApiResponse("error","Users not found " ,null));
+        }
+        return ResponseEntity.status(200).body(new ApiResponse("success","User found ",usersByNameOrEmail));
+    }
+
+    @GetMapping("/user/emails")
+    public ResponseEntity<ApiResponse> getUserEmails() {
+        List<String> userEmails = userRepository.getAllEmails();
+        if(userEmails.isEmpty()){
+            return ResponseEntity.status(200).body(new ApiResponse("success","User emails not found " ,null));
+        }
+        return ResponseEntity.status(200).body(new ApiResponse("success","User emails found " ,userEmails));
+
     }
 
 }
