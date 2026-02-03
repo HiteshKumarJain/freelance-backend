@@ -22,7 +22,7 @@ public class User {
 
     @Min(value = 18,message = "Age should be above or equal to 18")
     @Max(value = 100,message = "Age cannot exceed 100")
-    @NotNull
+    @NotNull(message = "Please enter age")
     private Integer age;
 
     @NotBlank(message = "Please enter phone number")
