@@ -27,7 +27,7 @@ public class User {
 
     @NotBlank(message = "Please enter phone number")
     @Size(min = 10,max = 10,message = "Enter 10 digits for a phone number")
-    @Pattern(regexp="^[0-9]{10}$")
+    @Pattern(regexp="^[0-9]{10}$" ,message = "Enter proper numeric phone number")
     private String phone;
 
     @Size(max = 200 , message = "The address should be less than 200 characters")
