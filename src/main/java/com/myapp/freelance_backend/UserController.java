@@ -1,5 +1,6 @@
 package com.myapp.freelance_backend;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,16 +38,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse> registerUser(@RequestBody User user){
+    public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody User user){
 
-        if(user.getName() ==  null || user.getName().isEmpty()) {
-           return  ResponseEntity.status(400).body(new ApiResponse("error","Name is required",null));
-        }
-        if(user.getEmail() ==  null || user.getEmail().isEmpty()) {
-           return  ResponseEntity.badRequest().body(new ApiResponse("error","Email is required",null));
-//           both of the return statements are same only in name if condition and email if condition
-//            but the return statement used in the if condition of mail is a shortcut one
-        }
         if(userRepository.existsByEmail(user.getEmail())) {
             return ResponseEntity.status(409).body(new ApiResponse("error","Email id already registered",null));
         }
