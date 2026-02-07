@@ -1,16 +1,8 @@
-package com.myapp.freelance_backend;
+package com.myapp.freelance_backend.dto.request;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
-import java.time.LocalDateTime;
-
-@Entity
-@Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class UserRegisterRequestDTO {
 
     @NotBlank(message = "Please enter name")
     @Size(min = 3, max = 50, message = "Name must be 3-50 characters")
@@ -36,13 +28,34 @@ public class User {
     @Size(min = 8,max=100,message = "Password must be 8-100 characters")
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    public UserRegisterRequestDTO(){
 
-    private Boolean active;
+    }
 
-    @Column(updatable=false)
-    private LocalDateTime createdAt;
+    public UserRegisterRequestDTO(String name, String email, Integer age, String phone, String address, String password) {
+        this.name = name;
+        this.email = email;
+        this.age = age;
+        this.phone = phone;
+        this.address = address;
+        this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public Integer getAge() {
         return age;
@@ -68,67 +81,11 @@ public class User {
         this.address = address;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createadAt) {
-        this.createdAt = createadAt;
-    }
-
-    public Boolean isActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    @PrePersist
-    protected void onCreate(){
-        if (this.role == null) {
-            this.role = Role.USER;  // Default
-        }
-
-        if (this.active == null) {
-            this.active = true;  // Default
-        }
-        this.createdAt = LocalDateTime.now();
-    }
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
-    public String getName(){
-        return name;
     }
 }
