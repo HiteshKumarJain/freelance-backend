@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ApiResponse> handleMessageNotReableErrors(HttpMessageNotReadableException exception) {
+    public ResponseEntity<ApiResponse> handleMessageNotReadableErrors(HttpMessageNotReadableException exception) {
         return ResponseEntity.status(400).body(new ApiResponse("error",exception.getMostSpecificCause().getMessage(),null));
 
     }

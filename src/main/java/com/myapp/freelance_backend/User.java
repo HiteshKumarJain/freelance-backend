@@ -4,13 +4,15 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @NotBlank(message = "Please enter name")
     @Size(min = 3, max = 50, message = "Name must be 3-50 characters")
@@ -43,6 +45,9 @@ public class User {
 
     @Column(updatable=false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "author",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Post> posts = new ArrayList<>();
 
     public Integer getAge() {
         return age;
@@ -80,10 +85,6 @@ public class User {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createadAt) {
-        this.createdAt = createadAt;
-    }
-
     public Boolean isActive() {
         return active;
     }
@@ -110,11 +111,11 @@ public class User {
         }
         this.createdAt = LocalDateTime.now();
     }
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public String getEmail() {
@@ -130,5 +131,12 @@ public class User {
     }
     public String getName(){
         return name;
+    }
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 }

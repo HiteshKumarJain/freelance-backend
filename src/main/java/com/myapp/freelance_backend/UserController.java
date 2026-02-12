@@ -76,7 +76,7 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<ApiResponse> findUserById(@PathVariable int id) {
+    public ResponseEntity<ApiResponse> findUserById(@PathVariable Long id) {
         Optional<User> userOptional = userRepository.findById(id);
         if(userOptional.isPresent()) {
            User user = userOptional.get();
@@ -155,7 +155,7 @@ public class UserController {
 
 //    PUT end points..
     @PutMapping("/user/{id}")
-    public ResponseEntity<ApiResponse> updateUser( @PathVariable int id, @RequestBody User user) {
+    public ResponseEntity<ApiResponse> updateUser( @PathVariable Long id, @RequestBody User user) {
         if(!userRepository.existsById(id)) {
             return ResponseEntity.status(404).body(new ApiResponse("error","User not found, cannot update",null));
         } else if(user.getName() == null || user.getName().isEmpty()) {
@@ -169,7 +169,7 @@ public class UserController {
     }
 //    PATCH end points
     @PatchMapping("/user/{id}")
-    public ResponseEntity<ApiResponse> partialUpdateUser(@PathVariable int id , @RequestBody User user) {
+    public ResponseEntity<ApiResponse> partialUpdateUser(@PathVariable Long id , @RequestBody User user) {
         Optional<User> existingUserOptional = userRepository.findById(id);
         if(!existingUserOptional.isPresent()) {
             return ResponseEntity.status(404).body(new ApiResponse("error","User not found, cannot update",null));
@@ -193,7 +193,7 @@ public class UserController {
 
 //DELETE end points..
     @DeleteMapping("/user/{id}")
-    public ResponseEntity<ApiResponse> deleteUser(@PathVariable int id) {
+    public ResponseEntity<ApiResponse> deleteUser(@PathVariable Long id) {
         if(!userRepository.existsById(id)) {
             return ResponseEntity.status(404).body(new ApiResponse("error","User not found, cannot delete",null));
         }
