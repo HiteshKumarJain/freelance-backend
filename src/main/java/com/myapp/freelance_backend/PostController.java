@@ -1,6 +1,7 @@
 package com.myapp.freelance_backend;
 
 import com.myapp.freelance_backend.dto.request.PostCreateRequestDTO;
+import com.myapp.freelance_backend.dto.response.AllPostsResponseDTO;
 import com.myapp.freelance_backend.dto.response.PostResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class PostController {
         Post post = new Post();
         post.setTitle(postCreateRequestDTO.getTitle());
         post.setContent(postCreateRequestDTO.getContent());
-        post.setAuthor(user);
+        user.addPost(post);
         Post savedPost = postRepository.save(post);
         PostResponseDTO savedPostDTO = convertToDTO(savedPost);
         return ResponseEntity.status(201).body(new ApiResponse("success","post created successfully",savedPostDTO));
@@ -33,8 +34,8 @@ public class PostController {
     @GetMapping("/user/allPosts")
     public ResponseEntity<ApiResponse> getAllPosts(){
         List<Post> allPosts = postRepository.findAll();
-        List<PostResponseDTO> postDtoList = convertToDTOList(allPosts);
-        return ResponseEntity.status(200).body(new ApiResponse("success","All posts found",postDtoList));
+        List<AllPostsResponseDTO> AllPostDtoList = convertToAllPostDTOList(allPosts);
+        return ResponseEntity.status(200).body(new ApiResponse("success","All posts found",AllPostDtoList));
     }
 
     @GetMapping("/user/getPosts/{userId}")
@@ -54,5 +55,12 @@ public class PostController {
           postsDtoList.add(new PostResponseDTO(p));
       }
       return postsDtoList;
+    }
+    private List<AllPostsResponseDTO> convertToAllPostDTOList(List<Post> posts) {
+        List<AllPostsResponseDTO>  postsDtoList = new ArrayList<>();
+        for(Post p : posts) {
+            postsDtoList.add(new AllPostsResponseDTO(p));
+        }
+        return postsDtoList;
     }
 }

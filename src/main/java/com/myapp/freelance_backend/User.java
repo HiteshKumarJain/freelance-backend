@@ -1,5 +1,6 @@
 package com.myapp.freelance_backend;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -47,6 +48,7 @@ public class User {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "author",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Post> posts = new ArrayList<>();
 
     public Integer getAge() {
@@ -138,5 +140,13 @@ public class User {
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
+    }
+    public void addPost(Post post) {
+        this.posts.add(post);
+        post.setAuthor(this);
+    }
+    public void removePost(Post post) {
+        this.posts.remove(post);
+        post.setAuthor(null);
     }
 }

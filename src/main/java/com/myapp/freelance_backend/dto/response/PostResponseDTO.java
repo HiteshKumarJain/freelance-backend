@@ -8,8 +8,8 @@ public class PostResponseDTO {
     private Long id;
     private String title;
     private String content;
-    private String author;
     private LocalDateTime createdAt;
+    private UserPostResponseDTO author;
 
     public PostResponseDTO() {
 
@@ -18,7 +18,7 @@ public class PostResponseDTO {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.author = post.getAuthor() != null ? post.getAuthor().getName() : "Unknown";
+        this.author = new UserPostResponseDTO(post.getAuthor());
         this.createdAt = post.getCreatedAt();
     }
 
@@ -46,11 +46,11 @@ public class PostResponseDTO {
         this.content = content;
     }
 
-    public String getAuthor() {
+    public UserPostResponseDTO getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(UserPostResponseDTO author) {
         this.author = author;
     }
 
