@@ -1,6 +1,7 @@
 package com.myapp.freelance_backend.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class PostCreateRequestDTO {
@@ -11,6 +12,9 @@ public class PostCreateRequestDTO {
     @NotBlank
     @Size(min = 10, max = 5000, message = "Content must be 10-5000 characters")
     private String content;
+
+    @NotNull(message = "Please enter the category id")
+    private Long categoryId;
 
     public PostCreateRequestDTO() {
 
@@ -30,5 +34,13 @@ public class PostCreateRequestDTO {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 }

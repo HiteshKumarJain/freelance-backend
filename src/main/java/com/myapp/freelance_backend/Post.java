@@ -29,6 +29,11 @@ public class Post {
     @JsonBackReference
     private User author;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    @JsonBackReference
+    private Category category;
+
     public String getTitle() {
         return title;
     }
@@ -70,4 +75,11 @@ public class Post {
         return createdAt;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }
