@@ -1,6 +1,8 @@
 package com.myapp.freelance_backend.dto.response;
 
 import com.myapp.freelance_backend.Post;
+import com.myapp.freelance_backend.Role;
+import com.myapp.freelance_backend.RoleName;
 import com.myapp.freelance_backend.User;
 
 import java.time.LocalDateTime;
@@ -15,8 +17,9 @@ public class UserRegisterResponseDTO {
 //    private String role;
     private LocalDateTime createdAt;
     private List<PostSummary> posts = new ArrayList<>();
+    private Set<RoleSummary> roles = new HashSet<>();
 
-    public class PostSummary {
+    public static class PostSummary {
         private Long id;
         private String title;
         private LocalDateTime createdAt;
@@ -53,6 +56,34 @@ public class UserRegisterResponseDTO {
         }
     }
 
+    public static class RoleSummary {
+        private Long id;
+        private RoleName name;
+
+        public RoleSummary(){
+
+        }
+        public RoleSummary(Role role){
+            this.id = role.getId();
+            this.name = role.getRoleName();
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public RoleName getName() {
+            return name;
+        }
+
+        public void setName(RoleName name) {
+            this.name = name;
+        }
+    }
     public UserRegisterResponseDTO() {
     }
 
@@ -64,6 +95,9 @@ public class UserRegisterResponseDTO {
         this.createdAt = user.getCreatedAt();
         for(Post p : user.getPosts()) {
             this.posts.add(new PostSummary(p));
+        }
+        for(Role r : user.getRoles()){
+            this.roles.add(new RoleSummary(r));
         }
     }
     public Long getId() {
@@ -113,5 +147,23 @@ public class UserRegisterResponseDTO {
         this.posts = posts;
     }
 
+    public Set<RoleSummary> getRoles() {
+        return roles;
+    }
 
+    public void setRoles(Set<RoleSummary> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        UserRegisterResponseDTO that = (UserRegisterResponseDTO) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

@@ -28,10 +28,9 @@ public class UserRegisterRequestDTO {
     @Size(min = 8,max=100,message = "Password must be 8-100 characters")
     private String password;
 
-    public UserRegisterRequestDTO(){
+    public UserRegisterRequestDTO() {
 
     }
-
     public UserRegisterRequestDTO(String name, String email, Integer age, String phone, String address, String password) {
         this.name = name;
         this.email = email;

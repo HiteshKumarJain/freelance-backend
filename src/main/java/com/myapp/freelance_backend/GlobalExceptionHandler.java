@@ -26,4 +26,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(400).body(new ApiResponse("error",exception.getMostSpecificCause().getMessage(),null));
 
     }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse> handleIllegalArguments(IllegalArgumentException exception) {
+        return ResponseEntity.status(400).body(new ApiResponse("error", exception.getMessage(), null));
+    }
 }

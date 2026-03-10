@@ -5,8 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -39,8 +38,8 @@ public class User {
     @Size(min = 8,max=100,message = "Password must be 8-100 characters")
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+//    @Enumerated(EnumType.STRING)
+//    private RoleName roleName;
 
     private Boolean active;
 
@@ -50,6 +49,14 @@ public class User {
     @OneToMany(mappedBy = "author",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Post> posts = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 
     public Integer getAge() {
         return age;
@@ -75,14 +82,20 @@ public class User {
         this.address = address;
     }
 
-    public Role getRole() {
-        return role;
-    }
+//    public RoleName getRole() {
+//        return roleName;
+//    }
+//
+//    public void setRole(RoleName roleName) {
+//        this.roleName = roleName;
+//    }
+public Set<Role> getRoles() {
+    return roles;
+}
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -104,9 +117,9 @@ public class User {
 
     @PrePersist
     protected void onCreate(){
-        if (this.role == null) {
-            this.role = Role.USER;  // Default
-        }
+//        if (this.roleName == null) {
+//            this.roleName = RoleName.ROLE_USER;  // Default
+//        }
 
         if (this.active == null) {
             this.active = true;  // Default
@@ -148,5 +161,27 @@ public class User {
     public void removePost(Post post) {
         this.posts.remove(post);
         post.setAuthor(null);
+    }
+
+    public void addRole(Role role){
+        this.roles.add(role);
+        role.getUsers().add(this);
+    }
+
+    public void removeRole(Role role){
+        this.roles.remove(role);
+        role.getUsers().remove(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

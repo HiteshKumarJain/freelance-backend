@@ -12,9 +12,11 @@ import java.util.stream.Collectors;
 @RestController
 public class UserController {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository,RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
 
@@ -46,6 +48,7 @@ public class UserController {
         if(userRepository.existsByEmail(requestDTO.getEmail())) {
             return ResponseEntity.status(409).body(new ApiResponse("error","Email id already registered",null));
         }
+
         User entityUser = new User();
         entityUser.setName(requestDTO.getName());
         entityUser.setEmail(requestDTO.getEmail());
@@ -53,11 +56,36 @@ public class UserController {
         entityUser.setAddress(requestDTO.getAddress());
         entityUser.setPassword(requestDTO.getPassword());
         entityUser.setPhone(requestDTO.getPhone());
+        Optional<Role> foundRoleOptional = roleRepository.findByRoleName(RoleName.ROLE_USER);
+        if(foundRoleOptional.isEmpty()) {
+            return ResponseEntity.status(404).body(new ApiResponse("error","No Role found,please create role",null));
+        }
         User savedUser = userRepository.save(entityUser);
+        Role foundRole = foundRoleOptional.get();
+        savedUser.addRole(foundRole);
+        savedUser = userRepository.save(savedUser);
         UserRegisterResponseDTO responseDTO = convertToDTO(savedUser);
         return  ResponseEntity.status(201).body(new ApiResponse("Success","User created successfully",responseDTO));
     }
 
+    @PostMapping("/users/{userId}/roles/{roleId}")
+    public ResponseEntity<ApiResponse> assignRole(@PathVariable Long userId,@PathVariable Long roleId){
+        Optional<User> userOptional = userRepository.findById(userId);
+        Optional<Role> roleOptional = roleRepository.findById(roleId);
+
+        ResponseEntity<ApiResponse> apiResponseResponseEntity = userOptional.isEmpty() ? ResponseEntity.status(404).body(new ApiResponse("error", "User not found", null)) : roleOptional.isEmpty() ? ResponseEntity.status(404).body(new ApiResponse("error","Role not found",null)) : null;
+        if(apiResponseResponseEntity != null) {
+            return apiResponseResponseEntity;
+        }
+        User entityUser = userOptional.get();
+        Role entityRole = roleOptional.get();
+        if(entityUser.getRoles().contains(entityRole)) return ResponseEntity.status(409).body(new ApiResponse("error","User already exists with this role",null));
+        entityUser.addRole(entityRole);
+        User savedUser = userRepository.save(entityUser);
+        UserRegisterResponseDTO responseDTO = convertToDTO(savedUser);
+        return  ResponseEntity.status(200).body(new ApiResponse("Success","Role assigned successfully",responseDTO));
+
+    }
 //GET end points..
     @GetMapping("/users")
     public ResponseEntity<ApiResponse> getUsers(@RequestParam(required = false) String emailEnd) {
@@ -201,7 +229,25 @@ public class UserController {
         return ResponseEntity.status(200).body(new ApiResponse("success","User deleted successfully",null));
 
     }
+    @DeleteMapping("/users/{userId}/roles/{roleId}")
+    public ResponseEntity<ApiResponse> removeUserRole(@PathVariable Long userId,@PathVariable Long roleId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        Optional<Role> roleOptional = roleRepository.findById(roleId);
 
+        ResponseEntity<ApiResponse> apiResponseResponseEntity = userOptional.isEmpty() ? ResponseEntity.status(404).body(new ApiResponse("error", "User not found", null)) : roleOptional.isEmpty() ? ResponseEntity.status(404).body(new ApiResponse("error","Role not found",null)) : null;
+        if(apiResponseResponseEntity != null) {
+            return apiResponseResponseEntity;
+        }
+        User entityUser = userOptional.get();
+        Role entityRole = roleOptional.get();
+        if(!entityUser.getRoles().contains(entityRole)) return ResponseEntity.status(404).body(new ApiResponse("error","User doesn't have this role",null));
+
+        entityUser.removeRole(entityRole);
+        User savedUser = userRepository.save(entityUser);
+        UserRegisterResponseDTO responseDTO = convertToDTO(savedUser);
+        return  ResponseEntity.status(200).body(new ApiResponse("Success","Role removed successfully",responseDTO));
+
+    }
     //  private methods in controller
     private UserRegisterResponseDTO convertToDTO(User user) {
         return new UserRegisterResponseDTO(user);
