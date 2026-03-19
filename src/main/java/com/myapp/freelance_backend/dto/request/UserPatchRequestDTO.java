@@ -1,39 +1,28 @@
 package com.myapp.freelance_backend.dto.request;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserRegisterRequestDTO {
-
-    @NotBlank(message = "Please enter name")
+public class UserPatchRequestDTO {
     @Size(min = 3, max = 50, message = "Name must be 3-50 characters")
     private String name;
 
-    @NotBlank(message = "Please enter email")
     @Email(message = "Invalid email format")
-    @Column(unique = true)
     private String email;
 
     @Min(value = 18,message = "Age should be above or equal to 18")
     @Max(value = 100,message = "Age cannot exceed 100")
-    @NotNull(message = "Please enter age")
     private Integer age;
 
-    @NotNull(message = "Phone number is required")
     @Pattern(regexp = "^[0-9]{10}$", message = "Phone must be exactly 10 digits")
     private String phone;
 
     @Size(max = 200 , message = "The address should be less than 200 characters")
     private String address;
 
-    @NotBlank(message = "Please enter password")
     @Size(min = 8,max=100,message = "Password must be 8-100 characters")
     private String password;
-
 }

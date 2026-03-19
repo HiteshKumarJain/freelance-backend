@@ -1,5 +1,6 @@
-package com.myapp.freelance_backend;
+package com.myapp.freelance_backend.repository;
 
+import com.myapp.freelance_backend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

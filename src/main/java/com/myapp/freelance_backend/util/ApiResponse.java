@@ -1,4 +1,4 @@
-package com.myapp.freelance_backend;
+package com.myapp.freelance_backend.util;
 
 public class ApiResponse {
     private String status;

@@ -1,14 +1,18 @@
-package com.myapp.freelance_backend;
+package com.myapp.freelance_backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +24,7 @@ public class User {
 
     @NotBlank(message = "Please enter email")
     @Email(message = "Invalid email format")
+    @Column(unique = true)
     private String email;
 
     @Min(value = 18,message = "Age should be above or equal to 18")
@@ -58,62 +63,6 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-//    public RoleName getRole() {
-//        return roleName;
-//    }
-//
-//    public void setRole(RoleName roleName) {
-//        this.roleName = roleName;
-//    }
-public Set<Role> getRoles() {
-    return roles;
-}
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public Boolean isActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     @PrePersist
     protected void onCreate(){
@@ -126,34 +75,7 @@ public Set<Role> getRoles() {
         }
         this.createdAt = LocalDateTime.now();
     }
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
-    public String getName(){
-        return name;
-    }
-    public List<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
-    }
     public void addPost(Post post) {
         this.posts.add(post);
         post.setAuthor(this);

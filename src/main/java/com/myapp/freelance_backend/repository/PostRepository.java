@@ -1,8 +1,7 @@
-package com.myapp.freelance_backend;
+package com.myapp.freelance_backend.repository;
 
+import com.myapp.freelance_backend.entity.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.*;
 
 public interface PostRepository extends JpaRepository<Post,Long> {
 }

@@ -1,14 +1,17 @@
-package com.myapp.freelance_backend;
+package com.myapp.freelance_backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+import lombok.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
 @Table(name="categories")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,40 +41,4 @@ public class Category {
         post.setCategory(this);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-
-    public List<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPost(List<Post> posts) {
-        this.posts = posts;
-    }
 }

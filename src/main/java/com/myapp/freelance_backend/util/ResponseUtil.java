@@ -1,6 +1,5 @@
-package com.myapp.freelance_backend;
+package com.myapp.freelance_backend.util;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 public class ResponseUtil {

@@ -3,7 +3,13 @@ package com.myapp.freelance_backend.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class PostCreateRequestDTO {
     @NotBlank
     @Size(min=3, max=100)
@@ -16,31 +22,4 @@ public class PostCreateRequestDTO {
     @NotNull(message = "Please enter the category id")
     private Long categoryId;
 
-    public PostCreateRequestDTO() {
-
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
 }

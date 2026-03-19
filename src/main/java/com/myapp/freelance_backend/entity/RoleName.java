@@ -1,4 +1,4 @@
-package com.myapp.freelance_backend;
+package com.myapp.freelance_backend.entity;
 
 public enum RoleName {
     ROLE_ADMIN,
