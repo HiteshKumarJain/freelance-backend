@@ -19,19 +19,19 @@ public class PostController {
         this.postService = postService;
     }
 
-    @PostMapping("/user/{userId}/post")
+    @PostMapping("/users/{userId}/posts")
     public ResponseEntity<ApiResponse> createPost(@PathVariable Long userId, @Valid @RequestBody PostCreateRequestDTO requestDTO) {
         PostResponseDTO savedPostDTO = postService.createPost(userId,requestDTO);
         return ResponseUtil.success(201,"Post created successfully",savedPostDTO);
     }
 
-    @GetMapping("/user/allPosts")
+    @GetMapping("/posts")
     public ResponseEntity<ApiResponse> getAllPosts(){
         List<AllPostsResponseDTO> AllPostDtoList = postService.getAllPosts();
         return ResponseUtil.success(200,"All posts found",AllPostDtoList);
     }
 
-    @GetMapping("/user/getPosts/{userId}")
+    @GetMapping("/users/{userId}/posts")
     public ResponseEntity<ApiResponse> fetchUserPost(@PathVariable Long userId) {
         List<PostResponseDTO> dtoList = postService.fetchUserPost(userId);
         return ResponseUtil.success(200,"Posts of the user id : "+userId,dtoList);
